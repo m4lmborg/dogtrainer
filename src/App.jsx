@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Play, Check, Shuffle, Clock, Dog, Info, X } from "lucide-react";
+
+const HISTORY_STORAGE_KEY = "dogtrainer.history.v1";
+
+const formatDateInput = (date) => date.toISOString().slice(0, 10);
+const getDateOnly = (isoString) =>
+  isoString ? isoString.slice(0, 10) : formatDateInput(new Date());
 
 // Initial database of training exercises
 const initialTrainingExercises = [
@@ -43,11 +49,25 @@ const initialTrainingExercises = [
 export default function App() {
   const [exercises, setExercises] = useState(initialTrainingExercises);
   const [currentLesson, setCurrentLesson] = useState(null);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(() => {
+    const stored = localStorage.getItem(HISTORY_STORAGE_KEY);
+    if (!stored) return [];
+
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed;
+    } catch (error) {
+      console.error("Failed to parse history from storage", error);
+    }
+
+    return [];
+  });
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [editingExerciseId, setEditingExerciseId] = useState(null);
   const [selectedExerciseIds, setSelectedExerciseIds] = useState([]);
+  const todayString = formatDateInput(new Date());
+  const [dateFilter, setDateFilter] = useState({ mode: "date", value: todayString });
   const [formValues, setFormValues] = useState({
     id: null,
     title: "",
@@ -55,6 +75,25 @@ export default function App() {
     videoUrl: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+  }, [history]);
+
+  const getRelativeDateString = (offsetDays) => {
+    const target = new Date();
+    target.setDate(target.getDate() + offsetDays);
+    return formatDateInput(target);
+  };
+
+  const setFilterToDate = (value) => setDateFilter({ mode: "date", value });
+  const setFilterToWeek = () => setDateFilter({ mode: "week", value: todayString });
+  const setFilterToAll = () => setDateFilter({ mode: "all", value: "" });
+
+  const clearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem(HISTORY_STORAGE_KEY);
+  };
 
   // Generate a random lesson
   const randomizeLesson = () => {
@@ -81,10 +120,11 @@ export default function App() {
     const newEntry = {
       id: Date.now(),
       title: currentLesson.title,
+      date: now.toISOString(),
       time: timeString,
     };
 
-    setHistory([newEntry, ...history]);
+    setHistory((prev) => [newEntry, ...prev]);
   };
 
   const openVideo = () => {
@@ -244,6 +284,31 @@ export default function App() {
     setSelectedExerciseIds([]);
   };
 
+  const filterMatches = (entry) => {
+    if (dateFilter.mode === "all") return true;
+
+    if (dateFilter.mode === "week") {
+      const anchorDate = new Date(todayString);
+      const entryDate = new Date(entry.date);
+      const diffDays = (anchorDate - entryDate) / (1000 * 60 * 60 * 24);
+      return diffDays >= 0 && diffDays < 7;
+    }
+
+    if (!dateFilter.value) return true;
+    return getDateOnly(entry.date) === dateFilter.value;
+  };
+
+  const filteredHistory = history.filter(filterMatches);
+  const groupedHistory = history.reduce((acc, entry) => {
+    const dateKey = getDateOnly(entry.date);
+    if (!acc[dateKey]) acc[dateKey] = [];
+    acc[dateKey].push(entry);
+    return acc;
+  }, {});
+  const sortedDateKeys = Object.keys(groupedHistory).sort((a, b) =>
+    b.localeCompare(a)
+  );
+
   return (
     <div className="min-h-screen bg-stone-100 font-sans text-stone-800 p-4 sm:p-6 flex justify-center items-start">
       <div className="w-full max-w-md space-y-6">
@@ -337,31 +402,153 @@ export default function App() {
         </div>
 
         {/* History / Log Section */}
-        <div className="bg-white rounded-3xl shadow-sm border border-stone-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-stone-800 flex items-center gap-2">
+        <div className="bg-white rounded-3xl shadow-sm border border-stone-200 p-6 space-y-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2">
               <Clock className="w-5 h-5 text-indigo-500" />
-              Today's Log
-            </h3>
-            <span className="text-xs font-medium bg-stone-100 text-stone-500 px-2 py-1 rounded-full">
-              {history.length} Completed
-            </span>
+              <h3 className="font-bold text-stone-800">Training Log</h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium bg-stone-100 text-stone-500 px-2 py-1 rounded-full">
+                {filteredHistory.length} shown
+              </span>
+              <button
+                type="button"
+                onClick={clearHistory}
+                className="text-xs px-3 py-1 rounded-lg border border-rose-100 text-rose-600 hover:bg-rose-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={history.length === 0}
+              >
+                Clear history
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setFilterToDate(todayString)}
+                className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                  dateFilter.mode === "date" && dateFilter.value === todayString
+                    ? "bg-indigo-100 text-indigo-700 border-indigo-200"
+                    : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100"
+                }`}
+              >
+                Today
+              </button>
+              <button
+                type="button"
+                onClick={() => setFilterToDate(getRelativeDateString(-1))}
+                className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                  dateFilter.mode === "date" &&
+                  dateFilter.value === getRelativeDateString(-1)
+                    ? "bg-indigo-100 text-indigo-700 border-indigo-200"
+                    : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100"
+                }`}
+              >
+                Yesterday
+              </button>
+              <button
+                type="button"
+                onClick={setFilterToWeek}
+                className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                  dateFilter.mode === "week"
+                    ? "bg-indigo-100 text-indigo-700 border-indigo-200"
+                    : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100"
+                }`}
+              >
+                This week
+              </button>
+              <button
+                type="button"
+                onClick={setFilterToAll}
+                className={`px-3 py-1 text-xs rounded-full border transition-colors ${
+                  dateFilter.mode === "all"
+                    ? "bg-indigo-100 text-indigo-700 border-indigo-200"
+                    : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100"
+                }`}
+              >
+                All time
+              </button>
+            </div>
+
+            <label className="flex items-center gap-2 text-xs text-stone-600">
+              <span className="font-semibold">Pick a date</span>
+              <input
+                type="date"
+                value={dateFilter.mode === "date" ? dateFilter.value : todayString}
+                onChange={(e) => setFilterToDate(e.target.value)}
+                className="border border-stone-200 rounded-lg px-2 py-1 text-xs bg-white"
+              />
+            </label>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-stone-500">Daily summary</p>
+            {sortedDateKeys.length === 0 ? (
+              <p className="text-xs text-stone-400 italic">No history saved yet.</p>
+            ) : (
+              <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                {sortedDateKeys.map((dateKey) => (
+                  <div
+                    key={dateKey}
+                    className="flex items-center justify-between bg-stone-50 px-3 py-2 rounded-xl border border-stone-100"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-stone-700">
+                        {new Date(dateKey).toLocaleDateString([], {
+                          weekday: "short",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {groupedHistory[dateKey].slice(0, 4).map((entry) => (
+                          <span
+                            key={entry.id}
+                            className="text-[11px] bg-white border border-stone-200 text-stone-600 px-2 py-0.5 rounded-full"
+                          >
+                            {entry.title}
+                          </span>
+                        ))}
+                        {groupedHistory[dateKey].length > 4 && (
+                          <span className="text-[11px] text-stone-500">
+                            +{groupedHistory[dateKey].length - 4} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <span className="text-xs font-semibold text-indigo-600">
+                      {groupedHistory[dateKey].length} done
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="space-y-3">
-            {history.length === 0 ? (
+            {filteredHistory.length === 0 ? (
               <p className="text-sm text-stone-400 italic text-center py-4">
-                No sessions completed yet today.
+                No sessions match this date range.
               </p>
             ) : (
-              history.map((entry) => (
+              filteredHistory.map((entry) => (
                 <div
                   key={entry.id}
                   className="flex items-center justify-between bg-stone-50 p-3 rounded-xl border border-stone-100 animate-fadeIn"
                 >
-                  <span className="font-medium text-stone-700 text-sm">
-                    {entry.title}
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-stone-700 text-sm">
+                      {entry.title}
+                    </span>
+                    <span className="text-[11px] text-stone-400">
+                      {new Date(entry.date).toLocaleDateString([], {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
                   <span className="text-xs text-stone-400 font-mono bg-white px-2 py-1 rounded-md border border-stone-100">
                     {entry.time}
                   </span>
