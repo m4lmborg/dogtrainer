@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Play, Check, Shuffle, Clock, Dog, Info, X } from "lucide-react";
 
 // Initial database of training exercises
@@ -40,6 +40,27 @@ const initialTrainingExercises = [
   },
 ];
 
+const userDirectory = [
+  {
+    email: "trainer@dogtrainer.com",
+    name: "Toni Trainer",
+    role: "admin",
+    enabledSessionIds: initialTrainingExercises.map((ex) => ex.id),
+  },
+  {
+    email: "sam@customer.com",
+    name: "Sam Customer",
+    role: "customer",
+    enabledSessionIds: [1, 3, 4],
+  },
+  {
+    email: "jamie@customer.com",
+    name: "Jamie Customer",
+    role: "customer",
+    enabledSessionIds: [2, 5],
+  },
+];
+
 export default function App() {
   const [exercises, setExercises] = useState(initialTrainingExercises);
   const [currentLesson, setCurrentLesson] = useState(null);
@@ -55,15 +76,38 @@ export default function App() {
     videoUrl: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const defaultUserEmail =
+    userDirectory.find((user) => user.role === "customer")?.email ||
+    userDirectory[0].email;
+  const [activeUserEmail, setActiveUserEmail] = useState(defaultUserEmail);
+
+  const activeUser =
+    userDirectory.find((user) => user.email === activeUserEmail) ||
+    userDirectory[0];
+  const isAdmin = activeUser.role === "admin";
+  const enabledIds = activeUser.enabledSessionIds || [];
+  const availableExercises = isAdmin
+    ? exercises
+    : exercises.filter((ex) => enabledIds.includes(ex.id));
+
+  useEffect(() => {
+    if (!isAdmin && currentLesson && !enabledIds.includes(currentLesson.id)) {
+      setCurrentLesson(null);
+    }
+
+    if (!isAdmin && isManageModalOpen) {
+      setIsManageModalOpen(false);
+    }
+  }, [isAdmin, currentLesson, enabledIds, isManageModalOpen]);
 
   // Generate a random lesson
   const randomizeLesson = () => {
-    if (exercises.length === 0) return;
+    if (availableExercises.length === 0) return;
 
     setIsLoading(true);
     setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * exercises.length);
-      setCurrentLesson(exercises[randomIndex]);
+      const randomIndex = Math.floor(Math.random() * availableExercises.length);
+      setCurrentLesson(availableExercises[randomIndex]);
       setIsLoading(false);
     }, 400);
   };
@@ -93,6 +137,7 @@ export default function App() {
   };
 
   const openManageModal = () => {
+    if (!isAdmin) return;
     if (currentLesson) {
       setEditingExerciseId(currentLesson.id);
       setFormValues({
@@ -118,6 +163,7 @@ export default function App() {
   };
 
   const handleSaveExercise = () => {
+    if (!isAdmin) return;
     const trimmedTitle = formValues.title.trim();
     const trimmedInstructions = formValues.instructions.trim();
 
@@ -164,6 +210,7 @@ export default function App() {
   };
 
   const handleEditFromList = (id) => {
+    if (!isAdmin) return;
     const target = exercises.find((ex) => ex.id === id);
     if (!target) return;
     setEditingExerciseId(id);
@@ -176,6 +223,7 @@ export default function App() {
   };
 
   const handleAddNewFromList = () => {
+    if (!isAdmin) return;
     setEditingExerciseId(null);
     setFormValues({
       id: null,
@@ -186,12 +234,14 @@ export default function App() {
   };
 
   const toggleSelectExercise = (id) => {
+    if (!isAdmin) return;
     setSelectedExerciseIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
   const toggleSelectAllExercises = () => {
+    if (!isAdmin) return;
     if (selectedExerciseIds.length === exercises.length) {
       setSelectedExerciseIds([]);
     } else {
@@ -200,6 +250,7 @@ export default function App() {
   };
 
   const handleDeleteSingle = (id) => {
+    if (!isAdmin) return;
     const updated = exercises.filter((ex) => ex.id !== id);
     setExercises(updated);
 
@@ -221,6 +272,7 @@ export default function App() {
   };
 
   const handleDeleteSelected = () => {
+    if (!isAdmin) return;
     if (selectedExerciseIds.length === 0) return;
 
     const idsToDelete = new Set(selectedExerciseIds);
@@ -260,13 +312,47 @@ export default function App() {
           </p>
         </header>
 
+        {/* Account selector */}
+        <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-wide text-stone-400 font-semibold">
+                Signed in as
+              </p>
+              <p className="text-sm font-semibold text-stone-800">
+                {activeUser.name}
+                <span className="ml-2 text-xs font-medium text-stone-500">
+                  ({activeUser.role})
+                </span>
+              </p>
+            </div>
+            <select
+              value={activeUserEmail}
+              onChange={(e) => setActiveUserEmail(e.target.value)}
+              className="border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            >
+              {userDirectory.map((user) => (
+                <option key={user.email} value={user.email}>
+                  {user.name} ({user.email})
+                </option>
+              ))}
+            </select>
+          </div>
+          <p className="text-xs text-stone-500">
+            {isAdmin
+              ? "Admins can manage all training sessions."
+              : "Customers can view and practice the sessions enabled for their account."}
+          </p>
+        </div>
+
         {/* Main Action Card */}
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-stone-200 relative">
           <div className="p-6 flex flex-col items-center space-y-6">
             {/* Randomize Button */}
             <button
               onClick={randomizeLesson}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 transition-all duration-200 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 shadow-md group"
+              disabled={availableExercises.length === 0}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 transition-all duration-200 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 shadow-md group disabled:bg-stone-200 disabled:text-stone-500 disabled:cursor-not-allowed disabled:hover:bg-stone-200 disabled:shadow-none"
             >
               <Shuffle
                 className={`w-5 h-5 ${
@@ -275,8 +361,19 @@ export default function App() {
                     : "group-hover:rotate-12 transition-transform"
                 }`}
               />
-              {currentLesson ? "Spin Again" : "Start Training Session"}
+              {availableExercises.length === 0
+                ? "No sessions available"
+                : currentLesson
+                  ? "Spin Again"
+                  : "Start Training Session"}
             </button>
+
+            {!isAdmin && availableExercises.length === 0 && (
+              <p className="text-xs text-center text-rose-500">
+                No sessions are enabled for this account. Please contact an
+                admin to get access.
+              </p>
+            )}
 
             {/* Display Area */}
             <div
@@ -371,14 +468,52 @@ export default function App() {
           </div>
         </div>
 
+        {/* Available sessions list */}
+        <div className="bg-white rounded-3xl shadow-sm border border-stone-200 p-6 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-stone-800">Available sessions</h3>
+            <span className="text-xs font-medium bg-stone-100 text-stone-500 px-2 py-1 rounded-full">
+              {availableExercises.length} visible
+            </span>
+          </div>
+          <p className="text-xs text-stone-500">
+            {isAdmin
+              ? "Admins see every session and can make changes."
+              : `Showing sessions enabled for ${activeUser.email}.`}
+          </p>
+          <div className="space-y-2 max-h-56 overflow-y-auto">
+            {availableExercises.length === 0 ? (
+              <p className="text-sm text-stone-400 italic text-center py-4">
+                No sessions are available for this user.
+              </p>
+            ) : (
+              availableExercises.map((exercise) => (
+                <div
+                  key={exercise.id}
+                  className="bg-stone-50 border border-stone-100 rounded-xl p-3"
+                >
+                  <p className="text-sm font-semibold text-stone-800">
+                    {exercise.title}
+                  </p>
+                  <p className="text-xs text-stone-500 mt-1 leading-relaxed">
+                    {exercise.instructions}
+                  </p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
         {/* Manage sessions button at bottom */}
-        <button
-          onClick={openManageModal}
-          className="w-full text-sm font-semibold text-indigo-600 hover:text-indigo-800 border border-indigo-100 bg-indigo-50/40 hover:bg-indigo-50 rounded-2xl py-3 flex items-center justify-center gap-2"
-        >
-          <Info className="w-4 h-4" />
-          Manage training sessions
-        </button>
+        {isAdmin && (
+          <button
+            onClick={openManageModal}
+            className="w-full text-sm font-semibold text-indigo-600 hover:text-indigo-800 border border-indigo-100 bg-indigo-50/40 hover:bg-indigo-50 rounded-2xl py-3 flex items-center justify-center gap-2"
+          >
+            <Info className="w-4 h-4" />
+            Manage training sessions
+          </button>
+        )}
       </div>
 
       {/* Video Modal Overlay */}
@@ -433,7 +568,7 @@ export default function App() {
       )}
 
       {/* Manage Exercises Modal */}
-      {isManageModalOpen && (
+      {isAdmin && isManageModalOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl relative">
             <button
