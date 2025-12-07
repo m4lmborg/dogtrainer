@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Play, Check, Shuffle, Clock, Dog, Info, X } from "lucide-react";
+import { Play, Check, Shuffle, Clock, Dog, Info, X, Plus, Edit } from "lucide-react";
 
 // Initial database of training exercises
 const initialTrainingExercises = [
@@ -186,6 +186,10 @@ export default function App() {
   // Generate a random number between 1 and 11 for the collar clock
   const generateClockNumber = () => {
     return Math.floor(Math.random() * 11) + 1; // 1-11 inclusive
+  };
+
+  const randomizeClockNumber = () => {
+    setClockNumber(generateClockNumber());
   };
 
   // Filter exercises based on location
@@ -404,162 +408,231 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-100 font-sans text-stone-800 p-4 sm:p-6 flex justify-center items-start">
-      <div className="w-full max-w-md space-y-6">
-        {/* Header */}
-        <header className="text-center space-y-2 mb-8">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="inline-flex items-center justify-center p-3 bg-amber-500 rounded-full shadow-lg">
-              <Dog className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
-                Daily Dog Trainer
-              </h1>
-              <p className="text-stone-500 text-sm">
-                Randomize your routine. Keep them guessing.
-              </p>
-            </div>
-          </div>
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50 p-4 md:p-8">
+        <div className="max-w-4xl mx-auto">
+        <header className="text-center mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-2">
+            Dog Training Exercises
+          </h1>
+          <p className="text-gray-600 mb-6">Professional training exercises for your canine companion</p>
           
           {/* Location Filter */}
-          <div className="flex flex-wrap gap-3 justify-center mt-2 mb-4">
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                name="location"
-                checked={locationFilter === 'anywhere'}
-                onChange={() => setLocationFilter('anywhere')}
-                className="text-amber-500 focus:ring-amber-300"
-              />
-              <span className="text-sm text-stone-700">Anywhere</span>
-            </label>
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                name="location"
-                checked={locationFilter === 'indoor'}
-                onChange={() => setLocationFilter('indoor')}
-                className="text-amber-500 focus:ring-amber-300"
-              />
-              <span className="text-sm text-stone-700">Indoors</span>
-            </label>
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                name="location"
-                checked={locationFilter === 'outdoor'}
-                onChange={() => setLocationFilter('outdoor')}
-                className="text-amber-500 focus:ring-amber-300"
-              />
-              <span className="text-sm text-stone-700">Outdoors</span>
-            </label>
+          <div className="flex flex-wrap gap-3 justify-center mb-6">
+            {[
+              { value: 'anywhere', label: '🌍 Anywhere' },
+              { value: 'indoor', label: '🏠 Indoor' },
+              { value: 'outdoor', label: '🌳 Outdoor' }
+            ].map(({ value, label }) => (
+              <button
+                key={value}
+                onClick={() => setLocationFilter(value)}
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                  locationFilter === value
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-100 transform -translate-y-0.5'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-blue-200 hover:text-blue-600'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-        </header>
 
-        {/* Main Action Card */}
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-stone-200 relative">
-          <div className="p-6 flex flex-col items-center space-y-6">
-            {/* Randomize Button */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={randomizeLesson}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 transition-all duration-200 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 shadow-md group"
-            >
-              <Shuffle
-                className={`w-5 h-5 ${
-                  isLoading
-                    ? "animate-spin"
-                    : "group-hover:rotate-12 transition-transform"
-                }`}
-              />
-              {currentLesson ? "Spin Again" : "Start Training Session"}
-            </button>
-
-            {/* Display Area */}
-            <div
-              className={`w-full transition-all duration-500 ${
-                currentLesson
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-4 h-0 overflow-hidden"
+              disabled={isLoading || getFilteredExercises().length === 0}
+              className={`flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                isLoading || getFilteredExercises().length === 0
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-700 hover:to-cyan-600 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0'
               }`}
             >
-              {currentLesson && (
+              {isLoading ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Loading...
+                </span>
+              ) : (
                 <>
-                  <div className="border-t border-stone-100 w-full my-2"></div>
-
-                  {/* Title */}
-                  <div className="text-center pt-2">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
-                      Current Drill
-                    </span>
-                    <h2 className="text-2xl font-bold mt-2 text-stone-800">
-                      {currentLesson.title}
-                    </h2>
-                  </div>
-
-                  {/* Instructions */}
-                  <div className="bg-stone-50 rounded-xl p-4 mt-4 text-stone-600 leading-relaxed text-sm text-center border border-stone-100">
-                    {currentLesson.instructions}
-                    
-                    {/* Collar Clock Number Display */}
-                    {currentLesson.title === "Collar Clock Game" && clockNumber && (
-                      <div className="mt-4 p-4 bg-white rounded-lg border-2 border-amber-200">
-                        <p className="text-sm font-medium text-amber-700 mb-2">Today's Clock Position:</p>
-                        <div className="text-4xl font-bold text-amber-600 animate-pulse">
-                          {clockNumber}
-                        </div>
-                        <p className="text-xs text-amber-600 mt-2">
-                          {clockNumber <= 6 ? 'Use your right hand' : 'Use your left hand'}
-                        </p>
-                        <button
-                          onClick={() => setClockNumber(generateClockNumber())}
-                          className="mt-2 text-xs bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-1 rounded-full transition-colors"
-                        >
-                          New Number
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="grid grid-cols-2 gap-4 mt-6">
-                    <button
-                      onClick={openVideo}
-                      className="flex items-center justify-center gap-2 py-3 px-4 bg-white border-2 border-stone-200 hover:border-indigo-200 hover:bg-indigo-50 text-stone-700 font-semibold rounded-xl transition-colors"
-                    >
-                      <Play className="w-4 h-4 fill-current" />
-                      View Video
-                    </button>
-
-                    <button
-                      onClick={markDone}
-                      className="flex items-center justify-center gap-2 py-3 px-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl shadow-sm active:scale-95 transition-all"
-                    >
-                      <Check className="w-5 h-5" />
-                      Mark Done
-                    </button>
-                  </div>
+                  <Shuffle size={18} className="text-white" />
+                  Randomize Lesson
                 </>
               )}
-            </div>
+            </button>
+          </div>
 
-            {/* Placeholder state if no lesson is selected */}
-            {!currentLesson && (
-              <div className="py-12 text-center text-stone-400">
-                <p>Press the button above to pick a random exercise.</p>
+          <p className="mt-4 text-xs text-gray-500 max-w-xl mx-auto">
+            Most dogs learn best with short, focused sessions. Aim for training sessions of around
+            <span className="font-semibold text-gray-700"> 3-9 minutes</span> per exercise, with plenty of breaks.
+          </p>
+        </header>
+
+        <main className="space-y-8">
+          {currentLesson ? (
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 transform transition-all duration-300 hover:shadow-2xl">
+              <div className="p-8">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <div className="inline-block mb-3">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {currentLesson.location.charAt(0).toUpperCase() + currentLesson.location.slice(1)}
+                      </span>
+                    </div>
+                    <h2 className="text-3xl font-extrabold text-gray-900 mb-2">
+                      {currentLesson.title}
+                    </h2>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Clock size={16} className="mr-1.5 text-blue-500" />
+                      <span>Last practiced: {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setCurrentLesson(null)}
+                    className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1.5 rounded-full transition-colors duration-200"
+                    aria-label="Close"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className="prose prose-blue max-w-none">
+                  <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                      <Info size={18} className="mr-2 text-blue-500" />
+                      Instructions
+                    </h3>
+                    <div className="space-y-3 text-gray-700">
+                      {currentLesson.instructions.split('\n').map((step, index) => {
+                        // Check if the line starts with a number and dot (for numbered steps)
+                        if (/^\d+\./.test(step.trim())) {
+                          return (
+                            <div key={index} className="flex items-start">
+                              <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-medium text-sm mr-3 mt-0.5">
+                                {step.match(/^\d+/)[0]}
+                              </span>
+                              <span className="leading-relaxed">{step.replace(/^\d+\.\s*/, '')}</span>
+                            </div>
+                          );
+                        }
+                        // Handle bullet points (lines starting with - or •)
+                        if (/^\s*[-•]\s+/.test(step)) {
+                          return (
+                            <div key={index} className="flex items-start ml-9">
+                              <span className="text-blue-500 mr-2">•</span>
+                              <span className="leading-relaxed">{step.replace(/^\s*[-•]\s+/, '')}</span>
+                            </div>
+                          );
+                        }
+                        // Regular paragraph
+                        return (
+                          <p key={index} className="leading-relaxed">
+                            {step}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {currentLesson.title === "Collar Clock Game" && clockNumber && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100 flex items-stretch gap-6">
+                    {/* Left: text block */}
+                    <div className="flex items-start gap-3 flex-1">
+                      <Clock size={18} className="mt-0.5 text-blue-600" />
+                      <div>
+                        <div className="text-xs uppercase tracking-wide text-blue-500 font-semibold">
+                          Clock position
+                        </div>
+                        <div className="text-sm text-slate-600">
+                          Touch at
+                          <span className="font-semibold text-blue-700"> {clockNumber} o'clock </span>
+                          on your dog's collar.
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1">
+                          Use a light, brief touch and always follow with a reward.
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Middle: big number */}
+                    <div className="flex items-center justify-center min-w-[96px]">
+                      <div className="px-5 py-3 rounded-lg bg-white border border-blue-100 text-blue-700 text-2xl font-extrabold leading-none">
+                        {clockNumber}
+                      </div>
+                    </div>
+
+                    {/* Right: spin button, vertically centered */}
+                    <div className="flex items-center justify-end min-w-[120px]">
+                      <button
+                        type="button"
+                        onClick={randomizeClockNumber}
+                        className="text-[11px] px-4 py-2 rounded-full bg-white text-blue-700 font-semibold border border-blue-200 hover:bg-blue-50 transition-colors whitespace-nowrap"
+                      >
+                        Spin new number
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <button
+                    onClick={markDone}
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                  >
+                    <Check size={18} className="text-white" />
+                    Mark as Done
+                  </button>
+                  {currentLesson.videoUrl && (
+                    <button
+                      onClick={openVideo}
+                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-xl hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                    >
+                      <Play size={18} className="text-white" />
+                      Watch Video
+                    </button>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          ) : (
+            <div className="text-center py-16 px-4 bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-dashed border-gray-200">
+              <div className="mx-auto w-28 h-28 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mb-8 shadow-inner">
+                <Dog size={48} className="text-blue-600" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-3 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                Ready to train your dog?
+              </h2>
+              <p className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg">
+                Click the button above to get a randomly selected training exercise
+                <span className="block text-sm text-gray-400 mt-2">
+                  Filter by location using the buttons above to find the perfect exercise for your current setting
+                </span>
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center">
+                <div className="flex items-center text-sm text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
+                  <span className="w-2.5 h-2.5 bg-blue-500 rounded-full mr-2"></span>
+                  {getFilteredExercises().length} exercises available
+                </div>
+                <div className="flex items-center text-sm text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
+                  <span className="w-2.5 h-2.5 bg-green-500 rounded-full mr-2"></span>
+                  {history.length} sessions completed
+                </div>
+              </div>
+            </div>
+          )}
 
-        {/* History / Log Section */}
-        <div className="bg-white rounded-3xl shadow-sm border border-stone-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-lg mb-2">Today's Log</h3>
-            <span className="text-xs font-medium bg-stone-100 text-stone-500 px-2 py-1 rounded-full">
-              {history.length} Completed
-            </span>
-          </div>
+          {/* History / Log Section */}
+          <div className="bg-white rounded-3xl shadow-sm border border-stone-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-lg mb-2">Today's Log</h3>
+              <span className="text-xs font-medium bg-stone-100 text-stone-500 px-2 py-1 rounded-full">
+                {history.length} Completed
+              </span>
+            </div>
 
           <div className="space-y-3">
             {history.length === 0 ? (
@@ -582,16 +655,18 @@ export default function App() {
               ))
             )}
           </div>
-        </div>
+            </div>
 
-        {/* Manage sessions button at bottom */}
-        <button
-          onClick={openManageModal}
-          className="w-full text-sm font-semibold text-indigo-600 hover:text-indigo-800 border border-indigo-100 bg-indigo-50/40 hover:bg-indigo-50 rounded-2xl py-3 flex items-center justify-center gap-2"
-        >
-          <Info className="w-4 h-4" />
-          Manage training sessions
-        </button>
+            {/* Manage sessions button at bottom */}
+            <button
+              onClick={openManageModal}
+              className="w-full text-sm font-semibold text-indigo-600 hover:text-indigo-800 border border-indigo-100 bg-indigo-50/40 hover:bg-indigo-50 rounded-2xl py-3 flex items-center justify-center gap-2"
+            >
+              <Info className="w-4 h-4" />
+              Manage training sessions
+            </button>
+          </main>
+        </div>
       </div>
 
       {/* Video Modal Overlay */}
@@ -828,6 +903,6 @@ export default function App() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
