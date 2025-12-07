@@ -6,80 +6,159 @@ const initialTrainingExercises = [
   {
     id: 1,
     title: "Calm Touch",
-    instructions:
-      "When your dog is already calm, have them sit or lie down. Slowly stroke down one side of their body in one smooth movement, then give a treat. Repeat on each side but avoid stroking directly along the spine. Once they are happily relaxing, add the word 'nice' as you stroke and begin to increase the time between the touch and the treat so they learn to stay settled while you handle them.",
+    instructions: `1. Wait until your dog is calm and relaxed
+2. Have them sit or lie down in a comfortable position
+3. Slowly stroke down one side of their body in a smooth motion
+4. Give a treat after each stroke
+5. Repeat on both sides, avoiding the spine area
+6. As they relax, add the word 'nice' during the stroke
+7. Gradually increase time between touch and treat to build patience`,
     videoUrl: "#",
     location: "indoor", // Best done in a quiet, controlled environment
   },
   {
     id: 2,
     title: "Eye Contact",
-    instructions:
-      "Hold a smelly treat in a closed hand at your dog's nose level. Let them sniff and lick without saying anything. Wait until they stop and look up into your eyes, then mark and give them the treat. Repeat several times, then start using pieces of their meals and gradually build up to a few seconds of eye contact before you reward.",
+    instructions: `1. Hold a treat in your closed hand at your dog's nose level
+2. Wait for them to make eye contact with you
+3. The moment they look into your eyes, mark (say 'yes' or click)
+4. Immediately reward with the treat
+5. Gradually increase duration before marking (1-3 seconds)
+6. Practice in different environments to improve focus
+7. Use their regular meals for training to reinforce the behavior`,
     videoUrl: "#",
     location: "anywhere", // Can be practiced in any setting
   },
   {
     id: 3,
     title: "With Me",
-    instructions:
-      "With your puppy facing you, place a treat in your open left hand by your left leg at their nose height. Show them the treat, then step back and say 'with me' as you move. Let them follow your hand. When they do, say 'good with me' and let them eat the treat. Start with 1 to 2 steps, then slowly increase the number of steps as they understand the game.",
+    instructions: `1. Stand with your dog facing you
+2. Hold a treat in your open left hand at your dog's nose height
+3. Take a small step backward while saying 'with me'
+4. When your dog follows your hand, say 'good with me' and reward them
+5. Start with 1-2 steps, then gradually increase distance
+6. Practice in different locations to generalize the behavior`,
     videoUrl: "#",
     location: "anywhere", // Can be practiced in any setting
   },
   {
     id: 4,
     title: "Nice (Check In Cue)",
-    instructions:
-      "Stand still with your dog on their walking lead. Keep your hands together in a relaxed central position so you are not waving food around. Each time they look in your direction, calmly say 'nice' and give them a tasty treat. Practice especially at the start of walks and in new places so they learn that checking in with you is always worth it.",
+    instructions: `1. Stand still with your dog on a loose lead
+2. Keep hands relaxed at your sides (no food visible)
+3. When your dog looks at you, say 'nice' in a calm voice
+4. Immediately reward with a high-value treat
+5. Practice in different environments:
+   - Start in a quiet room
+   - Move to the backyard
+   - Try on neighborhood walks
+   - Practice in busier locations
+6. Focus on the start of walks and in new environments`,
     videoUrl: "#",
     location: "outdoor", // Specifically for walks and new places
   },
   {
     id: 5,
     title: "Collar Clock Game",
-    instructions:
-      "Imagine your dog's collar as a clock face with numbers from 1 to 11. With them sitting or standing in front of you and nibbling a treat, randomly choose a number and briefly touch the collar at that 'time' with the correct hand. Use your right hand for 1 to 6 and your left hand for 6 to 11. Touch, do not grab, and never touch at 12. This helps them feel relaxed about hands coming toward their collar from different angles.",
+    instructions: `1. Have your dog sit or stand in front of you
+2. Imagine their collar as a clock face (1-11, never 12)
+3. Hold a treat in your right hand for positions 1-6
+4. Hold a treat in your left hand for positions 7-11
+5. Gently touch the collar at the chosen position
+6. Keep touches brief and light - no grabbing
+7. Reward immediately after each touch
+8. Vary the order of positions to keep your dog comfortable
+9. Never touch at the 12 o'clock position (directly under the chin)`,
     videoUrl: "#",
     location: "indoor", // Best done in a controlled environment
   },
   {
     id: 6,
     title: "Treat To Feet",
-    instructions:
-      "With your dog on a loose lead on your left side, take a single step forward with your left leg. If the lead stays relaxed, mark and place a treat right by your left foot. Let them eat it from the floor. When they finish, take another step and repeat. If they pull ahead and tighten the lead, stop walking, wait for the lead to go slack, then mark and reward by your left foot before moving again.",
+    instructions: `1. Start with your dog on your left side with a loose lead
+2. Take one small step forward with your left foot
+3. If the lead stays loose:
+   - Say 'yes' or click
+   - Place a treat by your left foot
+   - Let your dog eat from the ground
+4. If they pull ahead:
+   - Stop immediately
+   - Wait for the lead to go slack
+   - Take a step back if needed
+   - Reward when they return to your side
+5. Gradually increase the number of steps between rewards`,
     videoUrl: "#",
     location: "outdoor", // Involves walking on a lead
   },
   {
     id: 7,
     title: "Loose Leash Walking (Handler Position)",
-    instructions:
-      "Hold the lead in your right hand close to your belt area with your dog on your left. Start walking in a straight line without talking. Each time they are beside you or glance up at you, reward them on the move by delivering a treat at your left side. If they forge ahead and tighten the lead, quietly turn right and walk in a new direction so they have to return to your side, then reward again when the lead is loose.",
+    instructions: `1. Hold the lead in your right hand at your waist
+2. Keep your dog on your left side
+3. Walk in a straight line without speaking
+4. Reward when they:
+   - Walk beside you
+   - Glance up at you
+   - Respond to a change in direction
+5. If they pull ahead:
+   - Turn 90° to the right
+   - Continue walking in the new direction
+   - Reward when they catch up on a loose lead
+6. Keep training sessions short (5-10 minutes)
+7. Gradually increase distractions as they improve`,
     videoUrl: "#",
     location: "outdoor", // Specifically for walking
   },
   {
     id: 8,
     title: "Collar Hold",
-    instructions:
-      "Walk with your dog on your left using your loose leash walking pattern and reward them when they check in with you. When they are focused and relaxed, use your left hand to gently take hold of their collar at about the 9 o'clock position. When they look up at you while you are holding the collar, say 'treat', then calmly reach to your pouch with your right hand and feed them. Release the collar and use your release cue to move on. Keep the hold light and always paired with food.",
+    instructions: `1. Walk with your dog on a loose lead
+2. When they're focused and relaxed:
+   - Gently grasp their collar at the 9 o'clock position
+   - Wait for them to make eye contact
+   - Say 'treat' in a calm voice
+   - Reward with your other hand
+3. Keep the hold light and brief
+4. Always follow with a reward
+5. Gradually increase duration of the hold
+6. Practice in different environments
+7. Never use the collar hold for corrections`,
     videoUrl: "#",
     location: "anywhere", // Can be practiced in any setting
   },
   {
     id: 9,
     title: "Loop Exercise",
-    instructions:
-      "Start with a very short loop, for example just the front of your own house. Walk your puppy on your left, using your loose leash walking skills, and reward them often for staying close and checking in. When this feels easy, extend the loop slightly to the next house and back. Slowly add distance by one or two houses at a time. If they become worried or distracted, calmly go back to the shorter loop where they were confident and rebuild from there.",
+    instructions: `1. Start with a small loop in front of your home
+2. Walk with your dog on your left side
+3. Reward frequently for:
+   - Staying close to your side
+   - Maintaining a loose lead
+   - Checking in with you
+4. Gradually increase the loop size:
+   - Add one house at a time
+   - Only extend when comfortable
+   - Return to shorter loops if needed
+5. Watch for signs of stress or distraction
+6. Keep training sessions positive and rewarding`,
     videoUrl: "#",
     location: "outdoor", // Involves walking around the neighborhood
   },
   {
     id: 10,
     title: "Door Entrance Manners",
-    instructions:
-      "With your dog on lead at the door, place your hand on the handle but do not open it yet. Wait for them to look toward you, then mark, step away from the door, and reward them away from the threshold. Gradually build up from tiny movements such as wiggling the handle, to opening the door a crack, to opening it fully. Later add a cue like 'wait' and only step through the doorway when they are calm and checking in with you, then invite them out with a cheerful 'let's go'.",
+    instructions: `1. Approach the door with your dog on lead
+2. Place hand on the handle but don't open yet
+3. Wait for your dog to look at you
+4. Mark (say 'yes' or click) and reward away from the door
+5. Gradually increase difficulty:
+   - Wiggle the handle
+   - Open the door a crack
+   - Open halfway
+   - Fully open the door
+6. Add a 'wait' cue when they understand the concept
+7. Only proceed when they're calm and looking at you
+8. Use 'let's go' as the release cue to move forward`,
     videoUrl: "#",
     location: "indoor", // Specifically for doorways
   },
