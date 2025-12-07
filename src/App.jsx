@@ -5,37 +5,72 @@ import { Play, Check, Shuffle, Clock, Dog, Info, X } from "lucide-react";
 const initialTrainingExercises = [
   {
     id: 1,
-    title: "Sit & Stay",
+    title: "Calm Touch",
     instructions:
-      "Ask your dog to sit. Once seated, say 'Stay' and take one step back. Wait 3 seconds. Step back to the dog and reward. Repeat, gradually increasing distance and time.",
+      "When Loki is already calm, have him sit or lie down. Slowly stroke down one side of his body in one smooth movement, then give a treat. Repeat on each side but avoid stroking directly along the spine. Once he is happily relaxing, add the word 'nice' as you stroke and begin to increase the time between the touch and the treat so he learns to stay settled while you handle him.",
     videoUrl: "#",
   },
   {
     id: 2,
-    title: "Loose Leash Walking",
+    title: "Eye Contact",
     instructions:
-      "Walk with your dog on a loose leash. If they pull, stop immediately like a tree. Wait for the leash to slacken before moving forward again. Reward heavily when they walk by your side.",
+      "Hold a smelly treat in a closed hand at Loki's nose level. Let him sniff and lick without saying anything. Wait until he stops and looks up into your eyes, then mark and give him the treat. Repeat several times, then start using pieces of his meals and gradually build up to a few seconds of eye contact before you reward.",
     videoUrl: "#",
   },
   {
     id: 3,
-    title: "The 'Leave It' Command",
+    title: "With Me",
     instructions:
-      "Place a treat in your closed hand. Let the dog sniff or lick. Wait for them to stop and pull away. The moment they do, say 'Yes!' and give them a different treat from your other hand.",
+      "With Loki facing you, place a treat in your open left hand by your left leg at his nose height. Show him the treat, then step back and say 'with me' as you move. Let him follow your hand. When he does, say 'good with me' and let him eat the treat. Start with 1 to 2 steps, then slowly increase the number of steps as he understands the game.",
     videoUrl: "#",
   },
   {
     id: 4,
-    title: "Recall (Come)",
+    title: "Nice (Check In Cue)",
     instructions:
-      "Have a partner hold the dog or put them in a sit stay. Walk away, crouch down, open your arms and call their name happily with 'Come!'. Reward with a jackpot of treats when they arrive.",
+      "Stand still with Loki on his walking lead. Keep your hands together in a relaxed central position so you are not waving food around. Each time he looks in your direction, calmly say 'nice' and give him a tasty treat. Practice especially at the start of walks and in new places so he learns that checking in with you is always worth it.",
     videoUrl: "#",
   },
   {
     id: 5,
-    title: "Touch (Hand Target)",
+    title: "Collar Clock Game",
     instructions:
-      "Hold your palm out flat close to the dog's nose. When they sniff or touch it, click or say 'Yes!' and treat. Repeat until they reliably bump your hand with their nose.",
+      "Imagine Loki's collar as a clock face with numbers from 1 to 11. With him sitting or standing in front of you and nibbling a treat, randomly choose a number and briefly touch the collar at that 'time' with the correct hand. Use your right hand for 1 to 6 and your left hand for 6 to 11. Touch, do not grab, and never touch at 12. This helps him feel relaxed about hands coming toward his collar from different angles.",
+    videoUrl: "#",
+  },
+  {
+    id: 6,
+    title: "Treat To Feet",
+    instructions:
+      "With Loki on a loose lead on your left side, take a single step forward with your left leg. If the lead stays relaxed, mark and place a treat right by your left foot. Let him eat it from the floor. When he finishes, take another step and repeat. If he pulls ahead and tightens the lead, stop walking, wait for the lead to go slack, then mark and reward by your left foot before moving again.",
+    videoUrl: "#",
+  },
+  {
+    id: 7,
+    title: "Loose Leash Walking (Handler Position)",
+    instructions:
+      "Hold the lead in your right hand close to your belt area with Loki on your left. Start walking in a straight line without talking. Each time he is beside you or glances up at you, reward him on the move by delivering a treat at your left side. If he forges ahead and tightens the lead, quietly turn right and walk in a new direction so he has to return to your side, then reward again when the lead is loose.",
+    videoUrl: "#",
+  },
+  {
+    id: 8,
+    title: "Collar Hold",
+    instructions:
+      "Walk with Loki on your left using your loose leash walking pattern and reward him when he checks in with you. When he is focused and relaxed, use your left hand to gently take hold of his collar at about the 9 o'clock position. When he looks up at you while you are holding the collar, say 'treat', then calmly reach to your pouch with your right hand and feed him. Release the collar and use your release cue to move on. Keep the hold light and always paired with food.",
+    videoUrl: "#",
+  },
+  {
+    id: 9,
+    title: "Loop Exercise",
+    instructions:
+      "Start with a very short loop, for example just the front of your own house. Walk Loki on your left, using your loose leash walking skills, and reward him often for staying close and checking in. When this feels easy, extend the loop slightly to the next house and back. Slowly add distance by one or two houses at a time. If he becomes worried or distracted, calmly go back to the shorter loop where he was confident and rebuild from there.",
+    videoUrl: "#",
+  },
+  {
+    id: 10,
+    title: "Door Entrance Manners",
+    instructions:
+      "With Loki on lead at the door, place your hand on the handle but do not open it yet. Wait for him to look toward you, then mark, step away from the door, and reward him away from the threshold. Gradually build up from tiny movements such as wiggling the handle, to opening the door a crack, to opening it fully. Later add a cue like 'wait' and only step through the doorway when he is calm and checking in with you, then invite him out with a cheerful 'let's go'.",
     videoUrl: "#",
   },
 ];
