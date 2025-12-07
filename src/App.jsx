@@ -7,70 +7,70 @@ const initialTrainingExercises = [
     id: 1,
     title: "Calm Touch",
     instructions:
-      "When Loki is already calm, have him sit or lie down. Slowly stroke down one side of his body in one smooth movement, then give a treat. Repeat on each side but avoid stroking directly along the spine. Once he is happily relaxing, add the word 'nice' as you stroke and begin to increase the time between the touch and the treat so he learns to stay settled while you handle him.",
+      "When your dog is already calm, have them sit or lie down. Slowly stroke down one side of their body in one smooth movement, then give a treat. Repeat on each side but avoid stroking directly along the spine. Once they are happily relaxing, add the word 'nice' as you stroke and begin to increase the time between the touch and the treat so they learn to stay settled while you handle them.",
     videoUrl: "#",
   },
   {
     id: 2,
     title: "Eye Contact",
     instructions:
-      "Hold a smelly treat in a closed hand at Loki's nose level. Let him sniff and lick without saying anything. Wait until he stops and looks up into your eyes, then mark and give him the treat. Repeat several times, then start using pieces of his meals and gradually build up to a few seconds of eye contact before you reward.",
+      "Hold a smelly treat in a closed hand at your dog's nose level. Let them sniff and lick without saying anything. Wait until they stop and look up into your eyes, then mark and give them the treat. Repeat several times, then start using pieces of their meals and gradually build up to a few seconds of eye contact before you reward.",
     videoUrl: "#",
   },
   {
     id: 3,
     title: "With Me",
     instructions:
-      "With Loki facing you, place a treat in your open left hand by your left leg at his nose height. Show him the treat, then step back and say 'with me' as you move. Let him follow your hand. When he does, say 'good with me' and let him eat the treat. Start with 1 to 2 steps, then slowly increase the number of steps as he understands the game.",
+      "With your puppy facing you, place a treat in your open left hand by your left leg at their nose height. Show them the treat, then step back and say 'with me' as you move. Let them follow your hand. When they do, say 'good with me' and let them eat the treat. Start with 1 to 2 steps, then slowly increase the number of steps as they understand the game.",
     videoUrl: "#",
   },
   {
     id: 4,
     title: "Nice (Check In Cue)",
     instructions:
-      "Stand still with Loki on his walking lead. Keep your hands together in a relaxed central position so you are not waving food around. Each time he looks in your direction, calmly say 'nice' and give him a tasty treat. Practice especially at the start of walks and in new places so he learns that checking in with you is always worth it.",
+      "Stand still with your dog on their walking lead. Keep your hands together in a relaxed central position so you are not waving food around. Each time they look in your direction, calmly say 'nice' and give them a tasty treat. Practice especially at the start of walks and in new places so they learn that checking in with you is always worth it.",
     videoUrl: "#",
   },
   {
     id: 5,
     title: "Collar Clock Game",
     instructions:
-      "Imagine Loki's collar as a clock face with numbers from 1 to 11. With him sitting or standing in front of you and nibbling a treat, randomly choose a number and briefly touch the collar at that 'time' with the correct hand. Use your right hand for 1 to 6 and your left hand for 6 to 11. Touch, do not grab, and never touch at 12. This helps him feel relaxed about hands coming toward his collar from different angles.",
+      "Imagine your dog's collar as a clock face with numbers from 1 to 11. With them sitting or standing in front of you and nibbling a treat, randomly choose a number and briefly touch the collar at that 'time' with the correct hand. Use your right hand for 1 to 6 and your left hand for 6 to 11. Touch, do not grab, and never touch at 12. This helps them feel relaxed about hands coming toward their collar from different angles.",
     videoUrl: "#",
   },
   {
     id: 6,
     title: "Treat To Feet",
     instructions:
-      "With Loki on a loose lead on your left side, take a single step forward with your left leg. If the lead stays relaxed, mark and place a treat right by your left foot. Let him eat it from the floor. When he finishes, take another step and repeat. If he pulls ahead and tightens the lead, stop walking, wait for the lead to go slack, then mark and reward by your left foot before moving again.",
+      "With your dog on a loose lead on your left side, take a single step forward with your left leg. If the lead stays relaxed, mark and place a treat right by your left foot. Let them eat it from the floor. When they finish, take another step and repeat. If they pull ahead and tighten the lead, stop walking, wait for the lead to go slack, then mark and reward by your left foot before moving again.",
     videoUrl: "#",
   },
   {
     id: 7,
     title: "Loose Leash Walking (Handler Position)",
     instructions:
-      "Hold the lead in your right hand close to your belt area with Loki on your left. Start walking in a straight line without talking. Each time he is beside you or glances up at you, reward him on the move by delivering a treat at your left side. If he forges ahead and tightens the lead, quietly turn right and walk in a new direction so he has to return to your side, then reward again when the lead is loose.",
+      "Hold the lead in your right hand close to your belt area with your dog on your left. Start walking in a straight line without talking. Each time they are beside you or glance up at you, reward them on the move by delivering a treat at your left side. If they forge ahead and tighten the lead, quietly turn right and walk in a new direction so they have to return to your side, then reward again when the lead is loose.",
     videoUrl: "#",
   },
   {
     id: 8,
     title: "Collar Hold",
     instructions:
-      "Walk with Loki on your left using your loose leash walking pattern and reward him when he checks in with you. When he is focused and relaxed, use your left hand to gently take hold of his collar at about the 9 o'clock position. When he looks up at you while you are holding the collar, say 'treat', then calmly reach to your pouch with your right hand and feed him. Release the collar and use your release cue to move on. Keep the hold light and always paired with food.",
+      "Walk with your dog on your left using your loose leash walking pattern and reward them when they check in with you. When they are focused and relaxed, use your left hand to gently take hold of their collar at about the 9 o'clock position. When they look up at you while you are holding the collar, say 'treat', then calmly reach to your pouch with your right hand and feed them. Release the collar and use your release cue to move on. Keep the hold light and always paired with food.",
     videoUrl: "#",
   },
   {
     id: 9,
     title: "Loop Exercise",
     instructions:
-      "Start with a very short loop, for example just the front of your own house. Walk Loki on your left, using your loose leash walking skills, and reward him often for staying close and checking in. When this feels easy, extend the loop slightly to the next house and back. Slowly add distance by one or two houses at a time. If he becomes worried or distracted, calmly go back to the shorter loop where he was confident and rebuild from there.",
+      "Start with a very short loop, for example just the front of your own house. Walk your puppy on your left, using your loose leash walking skills, and reward them often for staying close and checking in. When this feels easy, extend the loop slightly to the next house and back. Slowly add distance by one or two houses at a time. If they become worried or distracted, calmly go back to the shorter loop where they were confident and rebuild from there.",
     videoUrl: "#",
   },
   {
     id: 10,
     title: "Door Entrance Manners",
     instructions:
-      "With Loki on lead at the door, place your hand on the handle but do not open it yet. Wait for him to look toward you, then mark, step away from the door, and reward him away from the threshold. Gradually build up from tiny movements such as wiggling the handle, to opening the door a crack, to opening it fully. Later add a cue like 'wait' and only step through the doorway when he is calm and checking in with you, then invite him out with a cheerful 'let's go'.",
+      "With your dog on lead at the door, place your hand on the handle but do not open it yet. Wait for them to look toward you, then mark, step away from the door, and reward them away from the threshold. Gradually build up from tiny movements such as wiggling the handle, to opening the door a crack, to opening it fully. Later add a cue like 'wait' and only step through the doorway when they are calm and checking in with you, then invite them out with a cheerful 'let's go'.",
     videoUrl: "#",
   },
 ];
@@ -90,6 +90,12 @@ export default function App() {
     videoUrl: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [clockNumber, setClockNumber] = useState(null);
+
+  // Generate a random number between 1 and 11 for the collar clock
+  const generateClockNumber = () => {
+    return Math.floor(Math.random() * 11) + 1; // 1-11 inclusive
+  };
 
   // Generate a random lesson
   const randomizeLesson = () => {
@@ -98,7 +104,16 @@ export default function App() {
     setIsLoading(true);
     setTimeout(() => {
       const randomIndex = Math.floor(Math.random() * exercises.length);
-      setCurrentLesson(exercises[randomIndex]);
+      const selectedLesson = exercises[randomIndex];
+      setCurrentLesson(selectedLesson);
+      
+      // If the selected lesson is the Collar Clock Game, generate a random number
+      if (selectedLesson.title === "Collar Clock Game") {
+        setClockNumber(generateClockNumber());
+      } else {
+        setClockNumber(null);
+      }
+      
       setIsLoading(false);
     }, 400);
   };
@@ -338,6 +353,25 @@ export default function App() {
                   {/* Instructions */}
                   <div className="bg-stone-50 rounded-xl p-4 mt-4 text-stone-600 leading-relaxed text-sm text-center border border-stone-100">
                     {currentLesson.instructions}
+                    
+                    {/* Collar Clock Number Display */}
+                    {currentLesson.title === "Collar Clock Game" && clockNumber && (
+                      <div className="mt-4 p-4 bg-white rounded-lg border-2 border-amber-200">
+                        <p className="text-sm font-medium text-amber-700 mb-2">Today's Clock Position:</p>
+                        <div className="text-4xl font-bold text-amber-600 animate-pulse">
+                          {clockNumber}
+                        </div>
+                        <p className="text-xs text-amber-600 mt-2">
+                          {clockNumber <= 6 ? 'Use your right hand' : 'Use your left hand'}
+                        </p>
+                        <button
+                          onClick={() => setClockNumber(generateClockNumber())}
+                          className="mt-2 text-xs bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-1 rounded-full transition-colors"
+                        >
+                          New Number
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Action Buttons */}
@@ -573,7 +607,7 @@ export default function App() {
                     value={formValues.title}
                     onChange={(e) => handleFormChange("title", e.target.value)}
                     className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                    placeholder="Loose leash walking with Loki"
+                    placeholder="Loose leash walking with your dog"
                   />
                 </div>
 
