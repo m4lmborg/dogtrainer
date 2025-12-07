@@ -9,6 +9,7 @@ const initialTrainingExercises = [
     instructions:
       "When your dog is already calm, have them sit or lie down. Slowly stroke down one side of their body in one smooth movement, then give a treat. Repeat on each side but avoid stroking directly along the spine. Once they are happily relaxing, add the word 'nice' as you stroke and begin to increase the time between the touch and the treat so they learn to stay settled while you handle them.",
     videoUrl: "#",
+    location: "indoor", // Best done in a quiet, controlled environment
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ const initialTrainingExercises = [
     instructions:
       "Hold a smelly treat in a closed hand at your dog's nose level. Let them sniff and lick without saying anything. Wait until they stop and look up into your eyes, then mark and give them the treat. Repeat several times, then start using pieces of their meals and gradually build up to a few seconds of eye contact before you reward.",
     videoUrl: "#",
+    location: "anywhere", // Can be practiced in any setting
   },
   {
     id: 3,
@@ -23,6 +25,7 @@ const initialTrainingExercises = [
     instructions:
       "With your puppy facing you, place a treat in your open left hand by your left leg at their nose height. Show them the treat, then step back and say 'with me' as you move. Let them follow your hand. When they do, say 'good with me' and let them eat the treat. Start with 1 to 2 steps, then slowly increase the number of steps as they understand the game.",
     videoUrl: "#",
+    location: "anywhere", // Can be practiced in any setting
   },
   {
     id: 4,
@@ -30,6 +33,7 @@ const initialTrainingExercises = [
     instructions:
       "Stand still with your dog on their walking lead. Keep your hands together in a relaxed central position so you are not waving food around. Each time they look in your direction, calmly say 'nice' and give them a tasty treat. Practice especially at the start of walks and in new places so they learn that checking in with you is always worth it.",
     videoUrl: "#",
+    location: "outdoor", // Specifically for walks and new places
   },
   {
     id: 5,
@@ -37,6 +41,7 @@ const initialTrainingExercises = [
     instructions:
       "Imagine your dog's collar as a clock face with numbers from 1 to 11. With them sitting or standing in front of you and nibbling a treat, randomly choose a number and briefly touch the collar at that 'time' with the correct hand. Use your right hand for 1 to 6 and your left hand for 6 to 11. Touch, do not grab, and never touch at 12. This helps them feel relaxed about hands coming toward their collar from different angles.",
     videoUrl: "#",
+    location: "indoor", // Best done in a controlled environment
   },
   {
     id: 6,
@@ -44,6 +49,7 @@ const initialTrainingExercises = [
     instructions:
       "With your dog on a loose lead on your left side, take a single step forward with your left leg. If the lead stays relaxed, mark and place a treat right by your left foot. Let them eat it from the floor. When they finish, take another step and repeat. If they pull ahead and tighten the lead, stop walking, wait for the lead to go slack, then mark and reward by your left foot before moving again.",
     videoUrl: "#",
+    location: "outdoor", // Involves walking on a lead
   },
   {
     id: 7,
@@ -51,6 +57,7 @@ const initialTrainingExercises = [
     instructions:
       "Hold the lead in your right hand close to your belt area with your dog on your left. Start walking in a straight line without talking. Each time they are beside you or glance up at you, reward them on the move by delivering a treat at your left side. If they forge ahead and tighten the lead, quietly turn right and walk in a new direction so they have to return to your side, then reward again when the lead is loose.",
     videoUrl: "#",
+    location: "outdoor", // Specifically for walking
   },
   {
     id: 8,
@@ -58,6 +65,7 @@ const initialTrainingExercises = [
     instructions:
       "Walk with your dog on your left using your loose leash walking pattern and reward them when they check in with you. When they are focused and relaxed, use your left hand to gently take hold of their collar at about the 9 o'clock position. When they look up at you while you are holding the collar, say 'treat', then calmly reach to your pouch with your right hand and feed them. Release the collar and use your release cue to move on. Keep the hold light and always paired with food.",
     videoUrl: "#",
+    location: "anywhere", // Can be practiced in any setting
   },
   {
     id: 9,
@@ -65,6 +73,7 @@ const initialTrainingExercises = [
     instructions:
       "Start with a very short loop, for example just the front of your own house. Walk your puppy on your left, using your loose leash walking skills, and reward them often for staying close and checking in. When this feels easy, extend the loop slightly to the next house and back. Slowly add distance by one or two houses at a time. If they become worried or distracted, calmly go back to the shorter loop where they were confident and rebuild from there.",
     videoUrl: "#",
+    location: "outdoor", // Involves walking around the neighborhood
   },
   {
     id: 10,
@@ -72,6 +81,7 @@ const initialTrainingExercises = [
     instructions:
       "With your dog on lead at the door, place your hand on the handle but do not open it yet. Wait for them to look toward you, then mark, step away from the door, and reward them away from the threshold. Gradually build up from tiny movements such as wiggling the handle, to opening the door a crack, to opening it fully. Later add a cue like 'wait' and only step through the doorway when they are calm and checking in with you, then invite them out with a cheerful 'let's go'.",
     videoUrl: "#",
+    location: "indoor", // Specifically for doorways
   },
 ];
 
@@ -82,12 +92,14 @@ export default function App() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [editingExerciseId, setEditingExerciseId] = useState(null);
+  const [locationFilter, setLocationFilter] = useState('anywhere'); // 'anywhere', 'indoor', 'outdoor'
   const [selectedExerciseIds, setSelectedExerciseIds] = useState([]);
   const [formValues, setFormValues] = useState({
     id: null,
     title: "",
     instructions: "",
     videoUrl: "",
+    location: "anywhere", // Default location
   });
   const [isLoading, setIsLoading] = useState(false);
   const [clockNumber, setClockNumber] = useState(null);
@@ -97,14 +109,24 @@ export default function App() {
     return Math.floor(Math.random() * 11) + 1; // 1-11 inclusive
   };
 
+  // Filter exercises based on location
+  const getFilteredExercises = () => {
+    if (locationFilter === 'anywhere') return exercises;
+    return exercises.filter(ex => ex.location === locationFilter);
+  };
+
   // Generate a random lesson
   const randomizeLesson = () => {
-    if (exercises.length === 0) return;
+    const filteredExercises = getFilteredExercises();
+    if (filteredExercises.length === 0) {
+      alert('No exercises match the current filter. Please adjust your filter settings.');
+      return;
+    }
 
     setIsLoading(true);
     setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * exercises.length);
-      const selectedLesson = exercises[randomIndex];
+      const randomIndex = Math.floor(Math.random() * filteredExercises.length);
+      const selectedLesson = filteredExercises[randomIndex];
       setCurrentLesson(selectedLesson);
       
       // If the selected lesson is the Collar Clock Game, generate a random number
@@ -150,6 +172,7 @@ export default function App() {
         title: currentLesson.title,
         instructions: currentLesson.instructions,
         videoUrl: currentLesson.videoUrl || "",
+        location: currentLesson.location,
       });
     } else {
       setEditingExerciseId(null);
@@ -158,6 +181,7 @@ export default function App() {
         title: "",
         instructions: "",
         videoUrl: "",
+        location: "anywhere",
       });
     }
     setIsManageModalOpen(true);
@@ -185,6 +209,7 @@ export default function App() {
               title: trimmedTitle,
               instructions: trimmedInstructions,
               videoUrl: formValues.videoUrl.trim(),
+              location: formValues.location,
             }
           : ex
       );
@@ -203,6 +228,7 @@ export default function App() {
         title: trimmedTitle,
         instructions: trimmedInstructions,
         videoUrl: formValues.videoUrl.trim(),
+        location: formValues.location,
       };
 
       const updated = [newExercise, ...exercises];
@@ -222,6 +248,7 @@ export default function App() {
       title: target.title,
       instructions: target.instructions,
       videoUrl: target.videoUrl || "",
+      location: target.location,
     });
   };
 
@@ -232,6 +259,7 @@ export default function App() {
       title: "",
       instructions: "",
       videoUrl: "",
+      location: "anywhere",
     });
   };
 
@@ -264,6 +292,7 @@ export default function App() {
         title: "",
         instructions: "",
         videoUrl: "",
+        location: "anywhere",
       });
     }
 
@@ -288,6 +317,7 @@ export default function App() {
         title: "",
         instructions: "",
         videoUrl: "",
+        location: "anywhere",
       });
     }
 
@@ -299,15 +329,53 @@ export default function App() {
       <div className="w-full max-w-md space-y-6">
         {/* Header */}
         <header className="text-center space-y-2 mb-8">
-          <div className="inline-flex items-center justify-center p-3 bg-amber-500 rounded-full shadow-lg mb-2">
-            <Dog className="w-8 h-8 text-white" />
+          <div className="flex items-center gap-4 mb-2">
+            <div className="inline-flex items-center justify-center p-3 bg-amber-500 rounded-full shadow-lg">
+              <Dog className="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
+                Daily Dog Trainer
+              </h1>
+              <p className="text-stone-500 text-sm">
+                Randomize your routine. Keep them guessing.
+              </p>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
-            Daily Dog Trainer
-          </h1>
-          <p className="text-stone-500 text-sm">
-            Randomize your routine. Keep them guessing.
-          </p>
+          
+          {/* Location Filter */}
+          <div className="flex flex-wrap gap-3 justify-center mt-2 mb-4">
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="location"
+                checked={locationFilter === 'anywhere'}
+                onChange={() => setLocationFilter('anywhere')}
+                className="text-amber-500 focus:ring-amber-300"
+              />
+              <span className="text-sm text-stone-700">Anywhere</span>
+            </label>
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="location"
+                checked={locationFilter === 'indoor'}
+                onChange={() => setLocationFilter('indoor')}
+                className="text-amber-500 focus:ring-amber-300"
+              />
+              <span className="text-sm text-stone-700">Indoors</span>
+            </label>
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="location"
+                checked={locationFilter === 'outdoor'}
+                onChange={() => setLocationFilter('outdoor')}
+                className="text-amber-500 focus:ring-amber-300"
+              />
+              <span className="text-sm text-stone-700">Outdoors</span>
+            </label>
+          </div>
         </header>
 
         {/* Main Action Card */}
@@ -408,10 +476,7 @@ export default function App() {
         {/* History / Log Section */}
         <div className="bg-white rounded-3xl shadow-sm border border-stone-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-stone-800 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-indigo-500" />
-              Today's Log
-            </h3>
+            <h3 className="font-bold text-lg mb-2">Today's Log</h3>
             <span className="text-xs font-medium bg-stone-100 text-stone-500 px-2 py-1 rounded-full">
               {history.length} Completed
             </span>
@@ -606,9 +671,33 @@ export default function App() {
                     type="text"
                     value={formValues.title}
                     onChange={(e) => handleFormChange("title", e.target.value)}
-                    className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                    className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
                     placeholder="Loose leash walking with your dog"
                   />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-stone-500">
+                    Location
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['anywhere', 'indoor', 'outdoor'].map((loc) => (
+                      <label key={loc} className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          name="location"
+                          checked={formValues.location === loc}
+                          onChange={() =>
+                            handleFormChange("location", loc)
+                          }
+                          className="text-amber-500 focus:ring-amber-300"
+                        />
+                        <span className="text-sm text-stone-700 capitalize">
+                          {loc}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="space-y-1">
@@ -621,7 +710,7 @@ export default function App() {
                       handleFormChange("instructions", e.target.value)
                     }
                     rows={5}
-                    className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 resize-none"
+                    className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 resize-none"
                     placeholder="Step by step notes for this drill."
                   />
                 </div>
@@ -636,7 +725,7 @@ export default function App() {
                     onChange={(e) =>
                       handleFormChange("videoUrl", e.target.value)
                     }
-                    className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                    className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
                     placeholder="https://youtu.be/..."
                   />
                 </div>
