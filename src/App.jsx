@@ -475,7 +475,7 @@ export default function App() {
           {currentLesson ? (
             <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 transform transition-all duration-300 hover:shadow-2xl">
               <div className="p-8">
-                <div className="flex justify-between items-start mb-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
                   <div>
                     <div className="inline-block mb-3">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -539,7 +539,7 @@ export default function App() {
                 </div>
 
                 {currentLesson.title === "Collar Clock Game" && clockNumber && (
-                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100 flex items-stretch gap-6">
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100 flex flex-col sm:flex-row items-stretch gap-4 sm:gap-6">
                     {/* Left: text block */}
                     <div className="flex items-start gap-3 flex-1">
                       <Clock size={18} className="mt-0.5 text-blue-600" />
@@ -559,14 +559,14 @@ export default function App() {
                     </div>
 
                     {/* Middle: big number */}
-                    <div className="flex items-center justify-center min-w-[96px]">
-                      <div className="px-5 py-3 rounded-lg bg-white border border-blue-100 text-blue-700 text-2xl font-extrabold leading-none">
+                    <div className="flex items-center justify-center sm:justify-center min-w-[96px] sm:min-w-[96px]">
+                      <div className="px-6 py-3 rounded-lg bg-white border border-blue-100 text-blue-700 text-2xl font-extrabold leading-none">
                         {clockNumber}
                       </div>
                     </div>
 
                     {/* Right: spin button, vertically centered */}
-                    <div className="flex items-center justify-end min-w-[120px]">
+                    <div className="flex items-center justify-start sm:justify-end min-w-[120px] sm:min-w-[120px] mt-1 sm:mt-0">
                       <button
                         type="button"
                         onClick={randomizeClockNumber}
@@ -627,7 +627,7 @@ export default function App() {
 
           {/* History / Log Section */}
           <div className="bg-white rounded-3xl shadow-sm border border-stone-200 p-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between gap-2 flex-wrap mb-4">
               <h3 className="font-bold text-lg mb-2">Today's Log</h3>
               <span className="text-xs font-medium bg-stone-100 text-stone-500 px-2 py-1 rounded-full">
                 {history.length} Completed
@@ -643,7 +643,7 @@ export default function App() {
               history.map((entry) => (
                 <div
                   key={entry.id}
-                  className="flex items-center justify-between bg-stone-50 p-3 rounded-xl border border-stone-100 animate-fadeIn"
+                  className="flex items-center justify-between gap-2 flex-wrap bg-stone-50 p-3 rounded-xl border border-stone-100 animate-fadeIn"
                 >
                   <span className="font-medium text-stone-700 text-sm">
                     {entry.title}
